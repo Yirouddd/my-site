@@ -21,7 +21,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          submodules: false  # 改为false，因为我们手动安装主题
+          submodules: false  # 改为false，因为我们手动安装主题1
           fetch-depth: 0
 
       - name: Install Hugo Theme
