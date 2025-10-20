@@ -4,6 +4,15 @@ on:
   push:
     branches: [main]
 
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -17,41 +26,32 @@ jobs:
           hugo-version: '0.120.4'
           extended: true
 
-      - name: Install Theme - Multiple Methods
+      - name: Install Theme via Git
         run: |
-          echo "=== Attempting to install theme ==="
           rm -rf themes/hugo-profile
           mkdir -p themes
           cd themes
-          
-          # 方法1: Git克隆主分支
-          echo "Method 1: Git clone main branch"
-          git clone --depth 1 https://github.com/gurusabarish/hugo-profile.git hugo-profile || \
-          # 方法2: Git克隆master分支（如果main不存在）
-          (echo "Method 1 failed, trying master branch..." && \
-           git clone --depth 1 https://github.com/gurusabarish/hugo-profile.git hugo-profile-tmp && \
-           cd hugo-profile-tmp && \
-           git checkout master 2>/dev/null || git checkout main 2>/dev/null && \
-           cd .. && \
-           mv hugo-profile-tmp hugo-profile) || \
-          # 方法3: 使用不同的下载方式
-          (echo "Both git methods failed, using direct download..." && \
-           wget -O hugo-profile.zip https://codeload.github.com/gurusabarish/hugo-profile/zip/main && \
-           unzip hugo-profile.zip && \
-           mv hugo-profile-main hugo-profile && \
-           rm hugo-profile.zip)
-          
+          git clone --depth 1 https://github.com/gurusabarish/hugo-profile.git
           cd ..
-          echo "✅ Theme installation completed"
 
-      - name: Build Site
-        run: |
-          echo "=== Building site ==="
-          rm -rf public
-          hugo --minify
+      - name: Build
+        run: hugo --minify
 
-      - name: Deploy
-        uses: peaceiris/actions-gh-pages@v3
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./public
+          path: ./public
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
