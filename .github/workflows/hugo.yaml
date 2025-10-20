@@ -17,26 +17,16 @@ jobs:
           hugo-version: '0.120.4'
           extended: true
 
-      - name: Debug - Check Current State
+      - name: Install Theme with Correct URL
         run: |
-          echo "=== Current directory structure ==="
-          ls -la
-          echo "=== Themes directory ==="
-          ls -la themes/ || echo "No themes directory found"
-          echo "=== Checking if hugo-profile exists ==="
-          ls -la themes/hugo-profile/ 2>/dev/null && echo "Theme exists" || echo "Theme missing"
-
-      - name: Install Theme with Error Handling
-        run: |
-          # 清理可能损坏的主题
+          echo "=== Installing Hugo Profile Theme ==="
           rm -rf themes/hugo-profile
-          
-          echo "=== Downloading theme with wget ==="
           mkdir -p themes
           cd themes
           
-          # 使用wget下载，添加重试机制
-          wget --tries=3 --timeout=30 -O hugo-profile.zip https://github.com/gurusabarish/hugo-profile/archive/main.zip
+          # 使用正确的下载链接
+          echo "Downloading theme..."
+          wget --tries=3 --timeout=30 -O hugo-profile.zip https://github.com/gurusabarish/hugo-profile/archive/refs/heads/main.zip
           
           if [ $? -eq 0 ]; then
             echo "✅ Download successful"
@@ -45,16 +35,17 @@ jobs:
             rm hugo-profile.zip
             echo "✅ Theme extracted successfully"
           else
-            echo "❌ Download failed, trying curl..."
-            curl -L -o hugo-profile.zip https://github.com/gurusabarish/hugo-profile/archive/main.zip
+            echo "❌ wget failed, trying curl..."
+            curl -L -o hugo-profile.zip https://github.com/gurusabarish/hugo-profile/archive/refs/heads/main.zip
             if [ $? -eq 0 ]; then
               unzip -q hugo-profile.zip
               mv hugo-profile-main hugo-profile
               rm hugo-profile.zip
               echo "✅ Theme extracted successfully with curl"
             else
-              echo "❌ All download methods failed"
-              exit 1
+              echo "❌ Download failed, using git clone as fallback..."
+              git clone https://github.com/gurusabarish/hugo-profile.git
+              echo "✅ Theme cloned successfully"
             fi
           fi
           
@@ -62,12 +53,12 @@ jobs:
 
       - name: Verify Theme Installation
         run: |
-          echo "=== Verifying theme structure ==="
+          echo "=== Verifying theme ==="
           ls -la themes/hugo-profile/ || exit 1
-          echo "=== Checking CSS files ==="
-          find themes/hugo-profile/static -name "*.css" | head -5
-          echo "=== Checking theme configuration ==="
-          ls -la themes/hugo-profile/theme.yaml || ls -la themes/hugo-profile/*.yaml | head -2
+          echo "=== Checking critical files ==="
+          [ -f "themes/hugo-profile/theme.yaml" ] && echo "✅ theme.yaml exists" || echo "❌ theme.yaml missing"
+          [ -d "themes/hugo-profile/layouts" ] && echo "✅ layouts exists" || echo "❌ layouts missing"
+          [ -d "themes/hugo-profile/static" ] && echo "✅ static exists" || echo "❌ static missing"
 
       - name: Build Hugo Site
         run: |
@@ -77,22 +68,22 @@ jobs:
 
       - name: Verify Build Output
         run: |
-          echo "=== Checking built files ==="
-          echo "Public directory:"
-          ls -la public/ | head -10
+          echo "=== Build verification ==="
+          echo "Public directory contents:"
+          ls -la public/ | head -15
           echo "CSS files:"
-          find public -name "*.css" | head -10
+          find public -name "*.css" 2>/dev/null | head -10 || echo "No CSS files found"
           echo "JS files:"
-          find public -name "*.js" | head -10
+          find public -name "*.js" 2>/dev/null | head -10 || echo "No JS files found"
           
-          # 关键检查
+          # 关键文件检查
           if [ -f "public/css/style.min.css" ]; then
-            echo "✅ SUCCESS: style.min.css found"
-            echo "File size:" $(stat -c%s "public/css/style.min.css") "bytes"
+            echo "✅ SUCCESS: style.min.css found - build is working!"
+            echo "File size:" $(wc -c < "public/css/style.min.css") "bytes"
           else
-            echo "❌ FAILED: style.min.css missing"
-            echo "Available CSS files:"
-            find public -name "*.css" -exec ls -la {} \;
+            echo "❌ style.min.css missing"
+            echo "Available files in public/css/:"
+            ls -la public/css/ 2>/dev/null || echo "No css directory"
           fi
 
       - name: Deploy
