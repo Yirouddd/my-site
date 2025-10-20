@@ -1,9 +1,9 @@
-baseURL: "https://Yirouddd/yiroudong.github.io/"  # ← CHANGE THIS
+baseURL: "https://Yirouddd/yiroudong.github.io/" 
 languageCode: "en-us"
-title: "Dongy's Portfolio"  # ← 改成你的名字
+title: "Your Name - Portfolio"  # ← 改成你的名字
 theme: hugo-profile
 
-# 添加这些关键配置
+# 添加GitHub Pages必需的配置
 relativeURLs: false
 canonifyURLs: true
 enableGitInfo: false
@@ -23,6 +23,12 @@ outputs:
     - "RSS"
 
 enableRobotsTXT: true
+
+#services:
+  #googleAnalytics:
+    #id: G-MEASUREMENT_ID
+  #disqus:
+    #shortname: your-disqus-shortname
 
 pagination:
   pagerSize: 3
@@ -46,7 +52,7 @@ Menus:
       weight: 2
 
 params:
-  title: "Dongy's Portfolio"  # ← 改成你的名字
+  title: "Your Name"  # ← 改成你的名字
   description: "A passionate web developer specializing in modern web technologies"
   favicon: "/fav.png"
 
@@ -54,9 +60,19 @@ params:
   mathjax: false
   animate: true
 
+  theme:
+    # disableThemeToggle: true
+    # defaultTheme: "light" # dark
+
+  font:
+    fontSize: 1rem
+    fontWeight: 400
+    lineHeight: 1.5
+    textAlign: left
+
   navbar:
     align: ms-auto
-    brandName: "Dongy"  # ← 改成你的名字
+    brandName: "Your Name"  # ← 改成你的名字
     disableSearch: false
     stickyNavBar:
       enable: true
@@ -70,11 +86,11 @@ params:
       disableAchievements: false
       disableContact: false
 
-  # Hero Section
+  # Hero Section - 更新为你的信息
   hero:
     enable: true
     intro: "Hi, my name is"
-    title: "Dongy."  # ← 改成你的名字
+    title: "Your Name."  # ← 改成你的名字
     subtitle: "I build things for the web"
     content: "A passionate web developer specializing in modern web technologies. I create websites that look great, feel fantastic, and function perfectly."
     image: /images/hero.svg
@@ -92,7 +108,7 @@ params:
           url: https://github.com/Yirouddd  # ← 改成你的GitHub
         - icon: fab fa-linkedin
           url: https://linkedin.com/in/yourprofile  # ← 改成你的LinkedIn
-        - icon: fab fa-twitter
+        - icon: fab fa-x-twitter
           url: https://twitter.com/yourusername  # ← 改成你的Twitter
 
   # About Section
@@ -115,7 +131,7 @@ params:
         - "Git"
         - "Hugo"
 
-  # Experience Section
+  # Experience Section - 更新为你的经历
   experience:
     enable: true
     items:
@@ -126,7 +142,7 @@ params:
             date: "2023 - Present"
             content: "Describe your responsibilities and achievements here. Focus on what you accomplished and the impact you made."
 
-  # Education Section
+  # Education Section - 更新为你的教育背景
   education:
     enable: true
     items:
@@ -139,7 +155,16 @@ params:
         content: |-
           Relevant coursework and achievements. Highlight projects, research, or extracurricular activities related to your field.
 
-  # Projects Section
+  # Achievements Section - 更新为你的成就
+  achievements:
+    enable: true
+    items:
+      - title: "Your Achievement"
+        content: "Brief description of what you accomplished and why it matters."
+        url: https://example.com
+        image: /images/achievement.jpg
+
+  # Projects Section - 更新为你的项目
   projects:
     enable: true
     items:
