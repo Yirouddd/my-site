@@ -54,7 +54,8 @@ jobs:
           echo "Found CSS files:"; find public -name "*.css" -maxdepth 3 || true
 
       - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v1
+        # Use the current supported upload-pages-artifact action
+        uses: actions/upload-pages-artifact@v4
         with:
           path: ./public
 
