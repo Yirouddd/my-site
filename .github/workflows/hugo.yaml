@@ -1,8 +1,9 @@
-name: Deploy Hugo to GitHub Pages
+name: Build and deploy Hugo site
 
 on:
   push:
     branches: [main]
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -10,7 +11,7 @@ permissions:
   id-token: write
 
 concurrency:
-  group: "pages"
+  group: pages
   cancel-in-progress: false
 
 jobs:
@@ -19,26 +20,43 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          submodules: false  # 改为false，因为我们手动安装主题
+          fetch-depth: 0
 
-      - name: Setup Hugo Extended
+      - name: Install Hugo Theme
+        run: |
+          # 手动安装主题，避免submodule问题
+          if [ ! -d "themes/hugo-profile" ]; then
+            echo "Installing hugo-profile theme..."
+            mkdir -p themes
+            cd themes
+            git clone --depth 1 https://github.com/gurusabarish/hugo-profile.git
+            cd ..
+          fi
+          echo "Theme installation completed"
+
+      - name: Setup Hugo
         uses: peaceiris/actions-hugo@v3
         with:
-          hugo-version: '0.120.4'
+          hugo-version: '0.120.4'  # 使用稳定版本
           extended: true
 
-      - name: Install Theme via Git
-        run: |
-          rm -rf themes/hugo-profile
-          mkdir -p themes
-          cd themes
-          git clone --depth 1 https://github.com/gurusabarish/hugo-profile.git
-          cd ..
-
-      - name: Build
-        run: hugo --minify
-
       - name: Setup Pages
+        id: pages
         uses: actions/configure-pages@v4
+
+      - name: Build the site
+        run: |
+          hugo --gc --minify --verbose
+
+      - name: Verify Build
+        run: |
+          echo "=== Build Verification ==="
+          [ -f "public/css/style.min.css" ] && echo "✅ CSS files generated" || echo "❌ CSS files missing"
+          ls -la public/css/ 2>/dev/null || echo "No CSS directory"
+          echo "Public directory structure:"
+          ls -la public/ | head -10
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
