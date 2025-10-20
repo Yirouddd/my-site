@@ -1,7 +1,12 @@
 baseURL: "https://Yirouddd/yiroudong.github.io/"  # ← CHANGE THIS
 languageCode: "en-us"
-title: "Your Name - Portfolio"  # ← CHANGE THIS
+title: "Dongy's Portfolio"  # ← 改成你的名字
 theme: hugo-profile
+
+# 添加这些关键配置
+relativeURLs: false
+canonifyURLs: true
+enableGitInfo: false
 
 # Add cache configuration for GitHub Pages
 caches:
@@ -18,13 +23,6 @@ outputs:
     - "RSS"
 
 enableRobotsTXT: true
-
-# Uncomment and configure these services as needed:
-#services:
-  #googleAnalytics:
-    #id: G-MEASUREMENT_ID
-  #disqus:
-    #shortname: your-disqus-shortname
 
 pagination:
   pagerSize: 3
@@ -48,27 +46,17 @@ Menus:
       weight: 2
 
 params:
-  title: "Your Name"  # ← CHANGE THIS
-  description: "A passionate web developer specializing in modern web technologies"  # ← CHANGE THIS
+  title: "Dongy's Portfolio"  # ← 改成你的名字
+  description: "A passionate web developer specializing in modern web technologies"
   favicon: "/fav.png"
 
   useBootstrapCDN: false
   mathjax: false
   animate: true
 
-  theme:
-    # disableThemeToggle: true
-    # defaultTheme: "light" # dark
-
-  font:
-    fontSize: 1rem
-    fontWeight: 400
-    lineHeight: 1.5
-    textAlign: left
-
   navbar:
     align: ms-auto
-    brandName: "Your Name"  # ← CHANGE THIS
+    brandName: "Dongy"  # ← 改成你的名字
     disableSearch: false
     stickyNavBar:
       enable: true
@@ -82,36 +70,36 @@ params:
       disableAchievements: false
       disableContact: false
 
-  # Hero Section - UPDATE ALL THIS
+  # Hero Section
   hero:
     enable: true
     intro: "Hi, my name is"
-    title: "Your Name."  # ← CHANGE THIS
-    subtitle: "I build things for the web"  # ← CHANGE THIS
-    content: "A passionate web developer specializing in modern web technologies. I create websites that look great, feel fantastic, and function perfectly."  # ← CHANGE THIS
+    title: "Dongy."  # ← 改成你的名字
+    subtitle: "I build things for the web"
+    content: "A passionate web developer specializing in modern web technologies. I create websites that look great, feel fantastic, and function perfectly."
     image: /images/hero.svg
     bottomImage:
       enable: true
     button:
       enable: true
       name: "Download Resume"
-      url: "/files/resume.pdf"  # ← Make sure this file exists in static/files/
+      url: "/files/resume.pdf"
       download: true
       newPage: false
     socialLinks:
       fontAwesomeIcons:
         - icon: fab fa-github
-          url: https://github.com/YOUR_USERNAME  # ← CHANGE THIS
+          url: https://github.com/Yirouddd  # ← 改成你的GitHub
         - icon: fab fa-linkedin
-          url: https://linkedin.com/in/YOUR_PROFILE  # ← CHANGE THIS
+          url: https://linkedin.com/in/yourprofile  # ← 改成你的LinkedIn
         - icon: fab fa-twitter
-          url: https://twitter.com/YOUR_USERNAME  # ← CHANGE THIS
+          url: https://twitter.com/yourusername  # ← 改成你的Twitter
 
-  # About Section - UPDATE THIS
+  # About Section
   about:
     enable: true
     title: "About Me"
-    image: "/images/me.png"  # ← Add your photo to static/images/me.png
+    image: "/images/me.png"
     content: |-
       I am a passionate developer with expertise in web technologies. I enjoy creating digital experiences that are both beautiful and functional.
 
@@ -127,7 +115,7 @@ params:
         - "Git"
         - "Hugo"
 
-  # Experience Section - UPDATE THIS WITH YOUR REAL EXPERIENCE
+  # Experience Section
   experience:
     enable: true
     items:
@@ -137,16 +125,8 @@ params:
           - name: "Your Position"
             date: "2023 - Present"
             content: "Describe your responsibilities and achievements here. Focus on what you accomplished and the impact you made."
-            featuredItems:
-              fontAwesomeIcons:
-                - icon: fa-brands fa-js
-                  url: https://javascript.com/
-                  tooltip: JavaScript
-                - icon: fab fa-react
-                  url: https://react.dev/
-                  tooltip: React
 
-  # Education Section - UPDATE WITH YOUR EDUCATION
+  # Education Section
   education:
     enable: true
     items:
@@ -159,42 +139,30 @@ params:
         content: |-
           Relevant coursework and achievements. Highlight projects, research, or extracurricular activities related to your field.
 
-  # Achievements Section - UPDATE WITH YOUR ACHIEVEMENTS
-  achievements:
-    enable: true
-    items:
-      - title: "Your Achievement"
-        content: "Brief description of what you accomplished and why it matters."
-        url: https://example.com
-        image: /images/achievement.jpg
-
-  # Projects Section - UPDATE WITH YOUR PROJECTS
+  # Projects Section
   projects:
     enable: true
     items:
-      - title: "Project Name"
-        content: "A brief description of your project, what it does, and the technologies used."
-        image: /images/projects/project1.jpg
+      - title: "My Portfolio Website"
+        content: "A personal portfolio website built with Hugo and Hugo Profile theme, deployed on GitHub Pages."
+        image: /images/projects/portfolio.jpg
         featured:
           name: "Live Demo"
-          link: https://your-project-demo.com
+          link: https://yirouddd.github.io
         badges:
-          - "React"
-          - "Node.js"
-          - "MongoDB"
+          - "Hugo"
+          - "GitHub Pages"
+          - "HTML/CSS"
         links:
           - icon: fab fa-github
-            url: https://github.com/yourusername/project
+            url: https://github.com/Yirouddd/yiroudong.github.io
 
   # Contact Section
   contact:
     enable: true
     content: "I'm always interested in new opportunities and connections. Feel free to reach out if you'd like to chat!"
     btnName: "Say Hello"
-    btnLink: "mailto:your.email@example.com"  # ← CHANGE THIS
-    # formspree:
-    #   enable: true
-    #   formId: your-formspree-id
+    btnLink: "mailto:your.email@example.com"  # ← 改成你的邮箱
 
   footer:
     recentPosts:
@@ -204,9 +172,9 @@ params:
       enable: true
       disableFeaturedImage: false
     socialNetworks:
-      github: https://github.com/YOUR_USERNAME  # ← CHANGE THIS
-      linkedin: https://linkedin.com/in/YOUR_PROFILE  # ← CHANGE THIS
-      twitter: https://twitter.com/YOUR_USERNAME  # ← CHANGE THIS
+      github: https://github.com/Yirouddd  # ← 改成你的GitHub
+      linkedin: https://linkedin.com/in/yourprofile  # ← 改成你的LinkedIn
+      twitter: https://twitter.com/yourusername  # ← 改成你的Twitter
 
   listPages:
     disableFeaturedImage: false
