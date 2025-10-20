@@ -1,8 +1,9 @@
-name: Hugo — Build and deploy to GitHub Pages
+name: Deploy Hugo site to Pages
 
 on:
   push:
-    branches: [ main ]
+    branches:
+      - main
   workflow_dispatch:
 
 permissions:
@@ -11,31 +12,37 @@ permissions:
   id-token: write
 
 concurrency:
-  group: github-pages
-  cancel-in-progress: true
+  group: "pages"
+  cancel-in-progress: false
+
+defaults:
+  run:
+    shell: bash
 
 jobs:
   build:
-    name: Build site
     runs-on: ubuntu-latest
-    outputs:
-      pages-artifact-path: ./public
+    env:
+      HUGO_VERSION: 0.151.0
     steps:
-      - name: Checkout repository
+      - name: Checkout
         uses: actions/checkout@v4
         with:
           submodules: false
           fetch-depth: 0
 
-      - name: Setup Hugo
+      - name: Setup Pages
+        id: pages
+        uses: actions/configure-pages@v5
+
+      - name: Setup Hugo (extended)
         uses: peaceiris/actions-hugo@v3
         with:
-          hugo-version: '0.151.0'
+          hugo-version: ${{ env.HUGO_VERSION }}
           extended: true
 
       - name: Install theme (if missing)
         run: |
-          # Ensure the theme is available (the theme in this repo is `themes/hugo-profile`).
           if [ ! -d "themes/hugo-profile" ]; then
             echo "Installing hugo-profile theme..."
             mkdir -p themes
@@ -44,12 +51,9 @@ jobs:
 
       - name: Copy theme exampleSite static -> root static (if present)
         run: |
-          # Many theme example assets live in themes/hugo-profile/exampleSite/static/
-          # Copy them into the site `static/` so they are included in the final public/ output.
           if [ -d "themes/hugo-profile/exampleSite/static" ]; then
             echo "Copying exampleSite static files into ./static (non-destructive)..."
             mkdir -p static
-            # -r copy recursively, -n don't overwrite existing files
             cp -rn themes/hugo-profile/exampleSite/static/. static/ || true
           else
             echo "No exampleSite static directory found; skipping copy"
@@ -57,7 +61,6 @@ jobs:
 
       - name: Copy theme exampleSite content -> root content (if present)
         run: |
-          # If the repository doesn't include example content (blogs, gallery), copy it so the built site matches the example
           if [ -d "themes/hugo-profile/exampleSite/content" ]; then
             echo "Copying exampleSite content into ./content (non-destructive)..."
             mkdir -p content
@@ -66,27 +69,38 @@ jobs:
             echo "No exampleSite content directory found; skipping copy"
           fi
 
-      - name: Build the site
+      - name: Install Node.js dependencies (if present)
         run: |
-          # Generate the site into ./public
-          hugo --gc --minify --cleanDestinationDir
+          if [[ -f package-lock.json || -f npm-shrinkwrap.json ]]; then
+            npm ci
+          else
+            echo "No package-lock.json found; skipping npm ci"
+          fi
 
-      - name: Verify output and list public/
+      - name: Build with Hugo
+        env:
+          HUGO_CACHEDIR: ${{ runner.temp }}/hugo_cache
+          HUGO_ENVIRONMENT: production
+          TZ: UTC
         run: |
-          echo "Public directory contents:"
-          ls -la public || true
-          echo "Found CSS files:"; find public -name "*.css" -maxdepth 3 || true
+          hugo \
+            --gc \
+            --minify \
+            --cleanDestinationDir \
+            --baseURL "${{ steps.pages.outputs.base_url }}"
 
       - name: Upload Pages artifact
-        # Use the current supported upload-pages-artifact action
         uses: actions/upload-pages-artifact@v4
         with:
           path: ./public
 
   deploy:
-    name: Deploy to GitHub Pages
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     needs: build
     steps:
       - name: Deploy to GitHub Pages
+        id: deployment
         uses: actions/deploy-pages@v4
