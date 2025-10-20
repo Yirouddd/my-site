@@ -42,6 +42,30 @@ jobs:
             git -C themes clone --depth 1 https://github.com/gurusabarish/hugo-profile.git || true
           fi
 
+      - name: Copy theme exampleSite static -> root static (if present)
+        run: |
+          # Many theme example assets live in themes/hugo-profile/exampleSite/static/
+          # Copy them into the site `static/` so they are included in the final public/ output.
+          if [ -d "themes/hugo-profile/exampleSite/static" ]; then
+            echo "Copying exampleSite static files into ./static (non-destructive)..."
+            mkdir -p static
+            # -r copy recursively, -n don't overwrite existing files
+            cp -rn themes/hugo-profile/exampleSite/static/. static/ || true
+          else
+            echo "No exampleSite static directory found; skipping copy"
+          fi
+
+      - name: Copy theme exampleSite content -> root content (if present)
+        run: |
+          # If the repository doesn't include example content (blogs, gallery), copy it so the built site matches the example
+          if [ -d "themes/hugo-profile/exampleSite/content" ]; then
+            echo "Copying exampleSite content into ./content (non-destructive)..."
+            mkdir -p content
+            cp -rn themes/hugo-profile/exampleSite/content/. content/ || true
+          else
+            echo "No exampleSite content directory found; skipping copy"
+          fi
+
       - name: Build the site
         run: |
           # Generate the site into ./public
