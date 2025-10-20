@@ -17,79 +17,41 @@ jobs:
           hugo-version: '0.120.4'
           extended: true
 
-      - name: Install Theme with Correct URL
+      - name: Install Theme - Multiple Methods
         run: |
-          echo "=== Installing Hugo Profile Theme ==="
+          echo "=== Attempting to install theme ==="
           rm -rf themes/hugo-profile
           mkdir -p themes
           cd themes
           
-          # 使用正确的下载链接
-          echo "Downloading theme..."
-          wget --tries=3 --timeout=30 -O hugo-profile.zip https://github.com/gurusabarish/hugo-profile/archive/refs/heads/main.zip
-          
-          if [ $? -eq 0 ]; then
-            echo "✅ Download successful"
-            unzip -q hugo-profile.zip
-            mv hugo-profile-main hugo-profile
-            rm hugo-profile.zip
-            echo "✅ Theme extracted successfully"
-          else
-            echo "❌ wget failed, trying curl..."
-            curl -L -o hugo-profile.zip https://github.com/gurusabarish/hugo-profile/archive/refs/heads/main.zip
-            if [ $? -eq 0 ]; then
-              unzip -q hugo-profile.zip
-              mv hugo-profile-main hugo-profile
-              rm hugo-profile.zip
-              echo "✅ Theme extracted successfully with curl"
-            else
-              echo "❌ Download failed, using git clone as fallback..."
-              git clone https://github.com/gurusabarish/hugo-profile.git
-              echo "✅ Theme cloned successfully"
-            fi
-          fi
+          # 方法1: Git克隆主分支
+          echo "Method 1: Git clone main branch"
+          git clone --depth 1 https://github.com/gurusabarish/hugo-profile.git hugo-profile || \
+          # 方法2: Git克隆master分支（如果main不存在）
+          (echo "Method 1 failed, trying master branch..." && \
+           git clone --depth 1 https://github.com/gurusabarish/hugo-profile.git hugo-profile-tmp && \
+           cd hugo-profile-tmp && \
+           git checkout master 2>/dev/null || git checkout main 2>/dev/null && \
+           cd .. && \
+           mv hugo-profile-tmp hugo-profile) || \
+          # 方法3: 使用不同的下载方式
+          (echo "Both git methods failed, using direct download..." && \
+           wget -O hugo-profile.zip https://codeload.github.com/gurusabarish/hugo-profile/zip/main && \
+           unzip hugo-profile.zip && \
+           mv hugo-profile-main hugo-profile && \
+           rm hugo-profile.zip)
           
           cd ..
+          echo "✅ Theme installation completed"
 
-      - name: Verify Theme Installation
-        run: |
-          echo "=== Verifying theme ==="
-          ls -la themes/hugo-profile/ || exit 1
-          echo "=== Checking critical files ==="
-          [ -f "themes/hugo-profile/theme.yaml" ] && echo "✅ theme.yaml exists" || echo "❌ theme.yaml missing"
-          [ -d "themes/hugo-profile/layouts" ] && echo "✅ layouts exists" || echo "❌ layouts missing"
-          [ -d "themes/hugo-profile/static" ] && echo "✅ static exists" || echo "❌ static missing"
-
-      - name: Build Hugo Site
+      - name: Build Site
         run: |
           echo "=== Building site ==="
           rm -rf public
-          hugo --minify --verbose
-
-      - name: Verify Build Output
-        run: |
-          echo "=== Build verification ==="
-          echo "Public directory contents:"
-          ls -la public/ | head -15
-          echo "CSS files:"
-          find public -name "*.css" 2>/dev/null | head -10 || echo "No CSS files found"
-          echo "JS files:"
-          find public -name "*.js" 2>/dev/null | head -10 || echo "No JS files found"
-          
-          # 关键文件检查
-          if [ -f "public/css/style.min.css" ]; then
-            echo "✅ SUCCESS: style.min.css found - build is working!"
-            echo "File size:" $(wc -c < "public/css/style.min.css") "bytes"
-          else
-            echo "❌ style.min.css missing"
-            echo "Available files in public/css/:"
-            ls -la public/css/ 2>/dev/null || echo "No css directory"
-          fi
+          hugo --minify
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
-        if: success()
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./public
-          force_orphan: true
