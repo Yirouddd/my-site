@@ -1,6 +1,6 @@
 baseURL: "https://Yirouddd/yiroudong.github.io/" 
 languageCode: "en-us"
-title: "Your Name - Portfolio"  # ← 改成你的名字
+title: "Yirou Dong - Portfolio"  # ← 改成你的名字
 theme: hugo-profile
 
 # 添加GitHub Pages必需的配置
@@ -52,7 +52,7 @@ Menus:
       weight: 2
 
 params:
-  title: "Your Name"  # ← 改成你的名字
+  title: "Yirou Dong"  # ← 改成你的名字
   description: "A passionate web developer specializing in modern web technologies"
   favicon: "/fav.png"
 
@@ -72,7 +72,7 @@ params:
 
   navbar:
     align: ms-auto
-    brandName: "Your Name"  # ← 改成你的名字
+    brandName: "Yirou Dong"  # ← 改成你的名字
     disableSearch: false
     stickyNavBar:
       enable: true
@@ -90,10 +90,10 @@ params:
   hero:
     enable: true
     intro: "Hi, my name is"
-    title: "Your Name."  # ← 改成你的名字
-    subtitle: "I build things for the web"
-    content: "A passionate web developer specializing in modern web technologies. I create websites that look great, feel fantastic, and function perfectly."
-    image: /images/hero.svg
+    title: "Yirou Dong."  # ← 改成你的名字
+    subtitle: "Crafting tomorrow's mind"
+    content: "AI student at the University of Edinburgh. I bridge theoretical research and practical systems, building a future powered by machine learning and algorithms."
+    image: /images/hero.jpg
     bottomImage:
       enable: true
     button:
