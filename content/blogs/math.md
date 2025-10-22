@@ -1,5 +1,5 @@
 ---
-title: "Render Math With Mathjax"
+title: "DFS & BFS"
 date: 2022-12-09T19:53:33+05:30
 draft: false
 author: "Gurusabarish"

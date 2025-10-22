@@ -45,11 +45,14 @@ Menus:
       title: Blog posts
       url: /blogs
       weight: 1
-    - identifier: gallery
-      name: Gallery
-      title: Gallery
-      url: /gallery
-      weight: 2
+      
+    
+    #- identifier: gallery
+    #  name: Gallery
+    #  title: Gallery
+    #  url: /gallery
+    #  weight: 2
+
 
 params:
   title: "Yirou Dong"  # ← 改成你的名字
@@ -141,7 +144,14 @@ params:
           - name: "Planning and Control Team Member"
             date: "2025 - Present"
             content: "Transforms perception data into driving actions. They develop algorithms for path planning, steering, and speed control to make the car drive fast, smooth, and safe."
-
+      
+      - company: "2024 INF1A FP Competition project"
+        companyUrl: "https://github.com/Yirouddd/Seasons-Through-the-Window-Variations-of-the-Pythagoras-Tree"
+        jobs:
+          - name: "Haskell"
+            date: "Winter 2024"
+            content: "Developed a Haskell-based seasonal simulation featuring interactive Pythagoras trees and dynamic snowfall. Collaborated in a team to solve technical challenges in functional programming, combining mathematical rendering with real-time animation." 
+  
   # Education Section - 更新为你的教育背景
   education:
     enable: true
@@ -193,12 +203,24 @@ params:
           - icon: fab fa-github
             url: https://github.com/Yirouddd/handwritten-digit-recognition
 
+      - title: "Seasons Through the Window Variations of the Pythagoras Tree"
+        content: "This project is a Haskell program that creates a visual simulation of seasonal scenes with falling snowflakes using the Gloss graphics library. It combines dynamic visual effects, such as snowfall, with static seasonal Pythagoras tree representations."
+        image: /images/projects/tree-demo.gif
+        featured:
+          name: "Live Demo"
+          link: https://github.com/Yirouddd/Seasons-Through-the-Window-Variations-of-the-Pythagoras-Tree
+        badges:
+          - "Haskell"
+        links:
+          - icon: fab fa-github
+            url: https://github.com/Yirouddd/handwritten-digit-recognition
+            
   # Contact Section
   contact:
     enable: true
     content: "I'm always interested in new opportunities and connections. Feel free to reach out if you'd like to chat!"
     btnName: "Say Hello"
-    btnLink: "s2646523@ed.ac.uk"  # ← 改成你的邮箱
+    btnLink: "mailto:s2646523@ed.ac.uk"  # ← 改成你的邮箱
 
   footer:
     recentPosts:
