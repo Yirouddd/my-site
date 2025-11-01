@@ -38,13 +38,13 @@ markup:
     renderer:
       unsafe: true
 
-Menus:
-  main:
-    - identifier: blog
-      name: Blog
-      title: Blog posts
-      url: /blogs
-      weight: 1
+#Menus:
+#  main:
+#    - identifier: blog
+#      name: Blog
+#      title: Blog posts
+#      url: /blogs
+#      weight: 1
       
     
     #- identifier: gallery
@@ -110,7 +110,7 @@ params:
         - icon: fab fa-github
           url: https://github.com/Yirouddd  # ← 改成你的GitHub
         - icon: fab fa-linkedin
-          url: https://linkedin.com/in/yourprofile  # ← 改成你的LinkedIn
+          url: https://www.linkedin.com/in/yirou-dong-8605a6395/ # ← 改成你的LinkedIn
         - icon: fab fa-x-twitter
           url: https://twitter.com/yourusername  # ← 改成你的Twitter
 
