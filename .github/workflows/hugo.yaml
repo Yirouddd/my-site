@@ -59,16 +59,6 @@ jobs:
             echo "No exampleSite static directory found; skipping copy"
           fi
 
-      - name: Copy theme exampleSite content -> root content (if present)
-        run: |
-          if [ -d "themes/hugo-profile/exampleSite/content" ]; then
-            echo "Copying exampleSite content into ./content (non-destructive)..."
-            mkdir -p content
-            cp -rn themes/hugo-profile/exampleSite/content/. content/ || true
-          else
-            echo "No exampleSite content directory found; skipping copy"
-          fi
-
       - name: Install Node.js dependencies (if present)
         run: |
           if [[ -f package-lock.json || -f npm-shrinkwrap.json ]]; then
